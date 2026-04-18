@@ -48,44 +48,27 @@ conda activate DL-mid-term
 
 ---
 
-## 4. PyTorch 설치
+## 4. 패키지 설치 (`requirements.txt`)
 
-GPU(CUDA)·Apple Silicon(MPS)·CPU에 맞게 **먼저** `torch`를 설치하는 것이 안전합니다. [PyTorch 시작하기](https://pytorch.org/get-started/locally/)에서 환경에 맞는 명령을 고릅니다.
-
-예시(버전은 사이트 안내에 맞게 조정):
-
-```bash
-# CUDA 12.x 예시
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
-
-# CPU만
-pip install torch torchvision
-```
-
-`requirements.txt`에는 `torch`가 **포함되어 있지 않습니다**. 반드시 위와 같이 별도 설치한 뒤 다음 단계로 넘어갑니다.
-
----
-
-## 5. 나머지 패키지 설치 (`requirements.txt`)
-
-프로젝트 루트에서:
+가상환경이 켜진 상태에서, 프로젝트 루트에서:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-`transformers`, `accelerate`, `matplotlib`, `PyQt5`, `scipy`, `num2words`, Jupyter(`notebook`, `ipykernel`) 등이 설치됩니다.
+`torch`, `torchvision`, `transformers`, `accelerate`, `matplotlib`, `PyQt5`, `scipy`, `num2words`, Jupyter(`notebook`, `ipykernel`) 등이 한 번에 설치됩니다.
+
+**NVIDIA GPU(CUDA) 전용 휠**이 필요하면 [PyTorch 시작하기](https://pytorch.org/get-started/locally/)에서 OS·CUDA에 맞는 명령으로 `torch`·`torchvision`을 **먼저** 설치한 다음 `pip install -r requirements.txt`를 실행하는 편이 안전합니다. 이미 `requirements.txt`로 깔린 뒤라면, 같은 사이트의 명령으로 `torch`·`torchvision`만 덮어써도 됩니다.
 
 ### 선택 패키지
 
 | 용도 | 패키지 | 설치 예시 |
 |------|--------|-----------|
-| SmolVLM2 **로컬 mp4** 비디오 셀에서 디코딩이 필요할 때 | `torchvision` | `pip install torchvision` (보통 torch와 함께 설치됨) |
 | 02번 노트북 마크다운 기준 3D 뷰(Open3D 또는 matplotlib 경로) | `open3d` | `pip install open3d` |
 
 ---
 
-## 6. Jupyter에서 노트북 실행
+## 5. Jupyter에서 노트북 실행
 
 ```bash
 conda activate DL-mid-term
@@ -110,11 +93,11 @@ python -m ipykernel install --user --name DL-mid-term --display-name "Python (DL
 
 ---
 
-## 7. `requirements.txt`와 세 노트북 대응 관계
+## 6. `requirements.txt`와 세 노트북 대응 관계
 
 | 구분 | 내용 |
 |------|------|
-| **공통** | `transformers`, `accelerate`, `huggingface-hub`, `safetensors`, `numpy`, `pillow`, `matplotlib` — 세 노트북 모두 사용 |
+| **공통** | `torch`, `torchvision`, `transformers`, `accelerate`, `huggingface-hub`, `safetensors`, `numpy`, `pillow`, `matplotlib` — 세 노트북 모두 사용 |
 | **01 SAM2** | `scipy`(마스크 후처리), `PyQt5`(포인트 픽커). **데스크톱 GUI**가 필요하며, 원격·헤드리스면 노트북 내 대안 셀을 사용 |
 | **02 Depth** | 공통만으로 충분. 마크다운에 Open3D·matplotlib 3D 대체가 언급되어 있으나, 깊이 맵·2D 시각화만 쓰면 `open3d` 없이 실행 가능 |
 | **03 SmolVLM2** | `num2words`(프로세서 import 시 필요) |
@@ -124,7 +107,7 @@ python -m ipykernel install --user --name DL-mid-term --display-name "Python (DL
 
 ---
 
-## 8. 노트북별 요약
+## 7. 노트북별 요약
 
 ### `01_hf_sam2.ipynb` — SAM2 포인트 세그멘테이션
 
@@ -159,7 +142,7 @@ Hugging Face의 `Sam2Processor` / `Sam2Model`로 이미지에서 **클릭 기반
 
 ---
 
-## 9. 자주 겪는 이슈
+## 8. 자주 겪는 이슈
 
 - **SAM2 Qt 창이 안 뜸**: SSH·서버에서는 디스플레이가 없을 수 있습니다. 노트북의 수동 좌표 대안 셀을 사용하거나 로컬 데스크톱에서 실행하세요.
 - **`transformers` 버전 오류**: `requirements.txt`의 `transformers>=4.50.0`을 만족하는지 확인하세요. SAM2·최신 API는 비교적 최근 버전이 필요합니다.

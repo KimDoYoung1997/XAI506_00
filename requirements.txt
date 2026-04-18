@@ -1,17 +1,18 @@
 # =============================================================================
 # HF notebooks: 01_hf_sam2, 02_hf_depth_anything, 03_hf_smolvlm
 #
-# Python: 3.10–3.12 권장 (아래 open3d는 PyPI 기준 cp312까지 휠 제공).
+# Python: 3.10–3.12 권장 (open3d 등 선택 패키지는 PyPI 휠이 OS·버전별로 다름).
 #
-# PyTorch는 CUDA/MPS/CPU에 따라 먼저 설치하는 편이 안전합니다.
-#   https://pytorch.org/get-started/locally/
-# 예) CUDA 12.x:
-#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
-# 예) CPU만:
-#   pip install torch torchvision
-# 이후 (이 파일에는 torch가 없음 — 반드시 위에서 먼저 설치):
+# 한 번에: conda activate … 후
 #   pip install -r requirements.txt
+#
+# NVIDIA GPU용 CUDA 휠이 필요하면 [PyTorch 시작하기](https://pytorch.org/get-started/locally/)
+# 에서 받은 index-url로 torch/torchvision만 먼저(또는 덮어) 설치한 뒤, 나머지는 동일하게 설치.
 # =============================================================================
+
+# --- PyTorch (세 노트북 공통; 기본은 PyPI 휠 — Mac MPS·CPU·대부분 Linux에 적합) ---
+torch>=2.1.0
+torchvision>=0.16.0
 
 # --- HF / 딥러닝 (SAM2, Depth Anything V2, SmolVLM2 공통) ---
 transformers>=4.50.0
@@ -42,12 +43,9 @@ ipykernel>=6.29.0
 # 02: 마크다운의 Open3D·3D 시각화 확장용. 깊이 맵·2D 플롯만이면 필수 아님.
 # open3d>=0.18.0
 
-# 03: 로컬 mp4 비디오 셀에서 디코딩/전처리에 필요할 수 있음(환경에 따라 다름).
-# torchvision>=0.18.0
-
 # =============================================================================
-# ri-motion-v5 저장소(pyproject)와 동일하게 고정 설치하려면 (선택)
-# torch / torchvision 은 위 PyTorch 안내에 맞게 별도 설치 후, 나머지만:
+# 고정 버전으로 맞추려면 (예시 — torch/torchvision은 환경에 맞게 조정)
+#   pip install torch==… torchvision==…
 #   pip install transformers==4.57.3 accelerate==1.12.0 numpy==2.2.6 pillow==12.1.1 matplotlib==3.10.8
 #   pip install scipy==1.15.3 PyQt5==5.15.11 num2words==0.5.14 ipykernel==6.29.5 notebook==7.5.1
 # =============================================================================
