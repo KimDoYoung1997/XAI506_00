@@ -1,0 +1,53 @@
+# =============================================================================
+# HF notebooks: 01_hf_sam2, 02_hf_depth_anything, 03_hf_smolvlm
+#
+# Python: 3.10–3.12 권장 (아래 open3d는 PyPI 기준 cp312까지 휠 제공).
+#
+# PyTorch는 CUDA/MPS/CPU에 따라 먼저 설치하는 편이 안전합니다.
+#   https://pytorch.org/get-started/locally/
+# 예) CUDA 12.x:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
+# 예) CPU만:
+#   pip install torch torchvision
+# 이후 (이 파일에는 torch가 없음 — 반드시 위에서 먼저 설치):
+#   pip install -r requirements.txt
+# =============================================================================
+
+# --- HF / 딥러닝 (SAM2, Depth Anything V2, SmolVLM2 공통) ---
+transformers>=4.50.0
+accelerate>=1.0.0
+safetensors>=0.4.0
+huggingface-hub>=0.20.0
+
+# --- 수치 / 이미지 / 시각화 (공통) ---
+numpy>=1.26.0,<3.0.0
+pillow>=10.0.0
+matplotlib>=3.8.0
+
+# --- 01_hf_sam2: scipy (마스크 후처리), PyQt5 (포인트 픽커) ---
+scipy>=1.11.0
+PyQt5>=5.15.0
+
+# --- 03_hf_smolvlm: SmolVLM2 프로세서가 import 시 요구 ---
+num2words>=0.5.0
+
+# --- Jupyter (노트북 열기·커널 등록) ---
+notebook>=7.0.0
+ipykernel>=6.29.0
+
+# =============================================================================
+# 선택 사항 (해당 기능을 쓸 때만 설치)
+# =============================================================================
+
+# 02: 마크다운의 Open3D·3D 시각화 확장용. 깊이 맵·2D 플롯만이면 필수 아님.
+# open3d>=0.18.0
+
+# 03: 로컬 mp4 비디오 셀에서 디코딩/전처리에 필요할 수 있음(환경에 따라 다름).
+# torchvision>=0.18.0
+
+# =============================================================================
+# ri-motion-v5 저장소(pyproject)와 동일하게 고정 설치하려면 (선택)
+# torch / torchvision 은 위 PyTorch 안내에 맞게 별도 설치 후, 나머지만:
+#   pip install transformers==4.57.3 accelerate==1.12.0 numpy==2.2.6 pillow==12.1.1 matplotlib==3.10.8
+#   pip install scipy==1.15.3 PyQt5==5.15.11 num2words==0.5.14 ipykernel==6.29.5 notebook==7.5.1
+# =============================================================================
