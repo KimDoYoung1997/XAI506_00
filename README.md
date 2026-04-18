@@ -1,10 +1,41 @@
-# DL mid-term — Hugging Face  노트북
+# DL mid-term — Hugging Face 노트북
 
 `transformers`로 **SAM2**, **Depth Anything V2**, **SmolVLM2**를 각각 돌리는 예제 노트북(`code/`)과 의존성 목록(`requirements.txt`)입니다.
 
 ---
 
-## 1. Conda 설치
+## 예제 입력 이미지
+
+세 노트북에서 기본으로 쓰기 좋게 **`imgs/xai506_example_image.jpg`**(강의실 장면)를 두었습니다. 노트북 안의 `impath` / `img_path` 변수를 바꾸면 다른 이미지로 바로 실험할 수 있습니다.
+
+---
+
+## 1. 저장소 복제 (`git clone`)
+
+터미널에서 원하는 위치(예: 홈의 `Projects` 등)로 이동한 뒤:
+
+```bash
+git clone https://github.com/KimDoYoung1997/XAI506_00.git
+cd XAI506_00
+```
+
+기본적으로 **`XAI506_00`** 폴더가 생기며, 그 안이 프로젝트 루트입니다(`README.md`, `requirements.txt`, `code/`, `imgs/` 등). 이후 Conda·`pip`·Jupyter 명령은 이 루트(또는 안내에 따라 `code/`)에서 실행하면 됩니다.
+
+### 변경 사항을 GitHub에 반영하기 (`git push`)
+
+이미 `git remote -v`로 `origin`이 `https://github.com/KimDoYoung1997/XAI506_00.git`로 잡혀 있다면, 로컬 커밋 후 예시는 다음과 같습니다.
+
+```bash
+git add .
+git commit -m "변경 요약 메시지"
+git push origin main
+```
+
+기본 브랜치가 `main`이 아니면 `git branch`로 이름을 확인한 뒤 그 브랜치로 푸시합니다. 원격이 비어 있지 않고 첫 푸시라면 `git pull origin main --rebase` 등으로 맞춘 뒤 다시 `git push` 할 수 있습니다.
+
+---
+
+## 2. Conda 설치
 
 아직 Conda가 없다면 다음 중 하나를 설치합니다.
 
@@ -15,13 +46,11 @@
 
 ---
 
-## 2. 가상환경 만들기·활성화
+## 3. 가상환경 만들기·활성화
 
-프로젝트 루트(이 `README.md`가 있는 폴더)에서 실행합니다.
+저장소를 `git clone`한 뒤 `cd XAI506_00`까지 한 상태(저장소 루트)에서 이어서 실행합니다.
 
 ```bash
-cd /path/to/mid_term
-
 # Python 3.10–3.12 권장 (requirements.txt 상단 주석과 동일)
 conda create -n DL-mid-term python=3.11 -y
 conda activate DL-mid-term
@@ -31,7 +60,7 @@ conda activate DL-mid-term
 
 ---
 
-## 3. PyTorch 설치
+## 4. PyTorch 설치
 
 GPU(CUDA)·Apple Silicon(MPS)·CPU에 맞게 **먼저** `torch`를 설치하는 것이 안전합니다. [PyTorch 시작하기](https://pytorch.org/get-started/locally/)에서 환경에 맞는 명령을 고릅니다.
 
@@ -49,7 +78,7 @@ pip install torch torchvision
 
 ---
 
-## 4. 나머지 패키지 설치 (`requirements.txt`)
+## 5. 나머지 패키지 설치 (`requirements.txt`)
 
 프로젝트 루트에서:
 
@@ -64,11 +93,11 @@ pip install -r requirements.txt
 | 용도 | 패키지 | 설치 예시 |
 |------|--------|-----------|
 | SmolVLM2 **로컬 mp4** 비디오 셀에서 디코딩이 필요할 때 | `torchvision` | `pip install torchvision` (보통 torch와 함께 설치됨) |
-| 07 마크다운 기준 3D 뷰(Open3D 또는 matplotlib 경로) | `open3d` | `pip install open3d` |
+| 02번 노트북 마크다운 기준 3D 뷰(Open3D 또는 matplotlib 경로) | `open3d` | `pip install open3d` |
 
 ---
 
-## 5. Jupyter에서 노트북 실행
+## 6. Jupyter에서 노트북 실행
 
 ```bash
 conda activate DL-mid-term
@@ -78,9 +107,9 @@ jupyter notebook
 
 브라우저에서 아래 파일을 순서대로 열고 **위에서부터** 셀을 실행합니다.
 
-- `01_hf_sam2_raw.ipynb`
-- `07_hf_depth_anything_raw.ipynb`
-- `09_hf_smolvlm_raw.ipynb`
+- `01_hf_sam2.ipynb`
+- `02_hf_depth_anything.ipynb`
+- `03_hf_smolvlm.ipynb`
 
 **VS Code / Cursor**를 쓰는 경우: `code` 폴더를 연 뒤 `.ipynb`를 열고, 커널로 `DL-mid-term` 환경의 Python을 선택합니다.
 
@@ -93,56 +122,56 @@ python -m ipykernel install --user --name DL-mid-term --display-name "Python (DL
 
 ---
 
-## 6. `requirements.txt`와 세 노트북 대응 관계
+## 7. `requirements.txt`와 세 노트북 대응 관계
 
 | 구분 | 내용 |
 |------|------|
 | **공통** | `transformers`, `accelerate`, `huggingface-hub`, `safetensors`, `numpy`, `pillow`, `matplotlib` — 세 노트북 모두 사용 |
 | **01 SAM2** | `scipy`(마스크 후처리), `PyQt5`(포인트 픽커). **데스크톱 GUI**가 필요하며, 원격·헤드리스면 노트북 내 대안 셀을 사용 |
-| **07 Depth** | 공통만으로 충분. 마크다운에 Open3D·matplotlib 3D 대체가 언급되어 있으나, 깊이 맵·2D 시각화만 쓰면 `open3d` 없이 실행 가능 |
-| **09 SmolVLM2** | `num2words`(프로세서 import 시 필요) |
+| **02 Depth** | 공통만으로 충분. 마크다운에 Open3D·matplotlib 3D 대체가 언급되어 있으나, 깊이 맵·2D 시각화만 쓰면 `open3d` 없이 실행 가능 |
+| **03 SmolVLM2** | `num2words`(프로세서 import 시 필요) |
 | **실행 도구** | `notebook`, `ipykernel` — Jupyter에서 `.ipynb` 실행 |
 
 모델 가중치는 Hugging Face Hub에 있으면 `from_pretrained` 시 **캐시**(`~/.cache/huggingface/hub/` 등)로 자동 내려받습니다. 비공개 모델이면 `huggingface-cli login`이 필요할 수 있습니다(본 예제는 공개 체크포인트 기준).
 
 ---
 
-## 7. 노트북별 요약
+## 8. 노트북별 요약
 
-### `01_hf_sam2_raw.ipynb` — SAM2 포인트 세그멘테이션
+### `01_hf_sam2.ipynb` — SAM2 포인트 세그멘테이션
 
 Hugging Face의 `Sam2Processor` / `Sam2Model`로 이미지에서 **클릭 기반** 마스크를 냅니다.
 
 | | 설명 |
 |---|------|
-| **입력** | 로컬 RGB 이미지 경로, 전경(좌클릭)·배경(우클릭) 좌표, `MODEL_ID` |
+| **입력** | 로컬 RGB 이미지 경로(기본 예: `../imgs/xai506_example_image.jpg`), 전경(좌클릭)·배경(우클릭) 좌표, `MODEL_ID` |
 | **출력** | 원본 해상도 `bool` 세그멘테이션 마스크, matplotlib 오버레이 시각화 |
 
 ---
 
-### `07_hf_depth_anything_raw.ipynb` — Depth Anything V2
+### `02_hf_depth_anything.ipynb` — Depth Anything V2
 
 `AutoImageProcessor` + `AutoModelForDepthEstimation`으로 **단안 상대 깊이**를 추정합니다.
 
 | | 설명 |
 |---|------|
-| **입력** | 로컬 RGB 이미지 경로, `MODEL_ID` |
+| **입력** | 로컬 RGB 이미지 경로(기본 예: `../imgs/xai506_example_image.jpg`), `MODEL_ID` |
 | **출력** | H×W `float32` 깊이 맵 **[0,1]** (**0=가까움, 1=멀음**, 메트릭 거리 아님), 깊이·비교 플롯 등 |
 
 ---
 
-### `09_hf_smolvlm_raw.ipynb` — SmolVLM2 (이미지·텍스트 / 비디오)
+### `03_hf_smolvlm.ipynb` — SmolVLM2 (이미지·텍스트 / 비디오)
 
 `AutoProcessor` + `AutoModelForImageTextToText`로 **HuggingFaceTB/SmolVLM2-500M-Video-Instruct** 체크포인트를 사용합니다.
 
 | | 설명 |
 |---|------|
-| **입력** | 이미지 경로 + 자연어 질문(텍스트); 마지막 선택 셀에서는 `.mp4` 경로 + 텍스트 |
+| **입력** | 이미지 경로(기본 예: `../imgs/xai506_example_image.jpg`) + 자연어 질문(텍스트); 마지막 선택 셀에서는 `.mp4` 경로 + 텍스트 |
 | **출력** | 모델이 생성한 **자연어 답변 문자열** |
 
 ---
 
-## 8. 자주 겪는 이슈
+## 9. 자주 겪는 이슈
 
 - **SAM2 Qt 창이 안 뜸**: SSH·서버에서는 디스플레이가 없을 수 있습니다. 노트북의 수동 좌표 대안 셀을 사용하거나 로컬 데스크톱에서 실행하세요.
 - **`transformers` 버전 오류**: `requirements.txt`의 `transformers>=4.50.0`을 만족하는지 확인하세요. SAM2·최신 API는 비교적 최근 버전이 필요합니다.
