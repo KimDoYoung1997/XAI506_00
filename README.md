@@ -21,18 +21,6 @@ cd XAI506_00
 
 기본적으로 **`XAI506_00`** 폴더가 생기며, 그 안이 프로젝트 루트입니다(`README.md`, `requirements.txt`, `code/`, `imgs/` 등). 이후 Conda·`pip`·Jupyter 명령은 이 루트(또는 안내에 따라 `code/`)에서 실행하면 됩니다.
 
-### 변경 사항을 GitHub에 반영하기 (`git push`)
-
-이미 `git remote -v`로 `origin`이 `https://github.com/KimDoYoung1997/XAI506_00.git`로 잡혀 있다면, 로컬 커밋 후 예시는 다음과 같습니다.
-
-```bash
-git add .
-git commit -m "변경 요약 메시지"
-git push origin main
-```
-
-기본 브랜치가 `main`이 아니면 `git branch`로 이름을 확인한 뒤 그 브랜치로 푸시합니다. 원격이 비어 있지 않고 첫 푸시라면 `git pull origin main --rebase` 등으로 맞춘 뒤 다시 `git push` 할 수 있습니다.
-
 ---
 
 ## 2. Conda 설치
